@@ -26,6 +26,7 @@ function extractMovie(movie: ApiMovie): Movie {
     backdrop_path: movie.backdrop_path,
     vote_average: movie.vote_average,
     rating: 0,
+    user_movie: false,
   };
 }
 

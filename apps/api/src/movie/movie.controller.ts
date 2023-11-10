@@ -8,7 +8,7 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Post()
-  async create(@Body() movie: Movie): Promise<Movie> {
+  async create(@Body() movie: Omit<Movie, 'user_movie'>): Promise<Movie> {
     try {
       return await this.movieService.create(movie);
     } catch (error) {

@@ -29,6 +29,8 @@ export class Movie implements MovieInterface {
   @Column({ default: 0 })
   rating: MovieInterface['rating'] = 0;
 
+  user_movie: MovieInterface['user_movie'] = true;
+
   constructor(movie?: Partial<Movie>) {
     Object.assign(this, movie);
   }

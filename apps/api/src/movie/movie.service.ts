@@ -11,7 +11,7 @@ export class MovieService {
     private movieRepository: MongoRepository<Movie>,
   ) {}
 
-  async create(movie: MovieInterface): Promise<MovieInterface> {
+  async create(movie: Omit<MovieInterface, 'user_movie'>): Promise<MovieInterface> {
     return this.movieRepository.save(movie);
   }
 

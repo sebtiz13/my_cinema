@@ -13,6 +13,7 @@ const movieData: MovieInterface = {
   backdrop_path: '/backdrop.jpg',
   vote_average: 8.2,
   rating: 0,
+  user_movie: true,
 };
 
 describe('MovieService', () => {

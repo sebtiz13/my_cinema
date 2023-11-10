@@ -29,7 +29,7 @@ describe('MovieController', () => {
   });
 
   it('can create movie', async () => {
-    const movie: Movie = {
+    const movie: Omit<Movie, 'user_movie'> = {
       id: 354912,
       title: 'Coco',
       overview: 'Lorem ipsum',
@@ -40,7 +40,7 @@ describe('MovieController', () => {
     };
     await controller.create(movie);
 
-    const functionCall = (movieService.create.mock.lastCall as [Movie])[0];
+    const functionCall = (movieService.create.mock.lastCall as [Omit<Movie, 'user_movie'>])[0];
 
     expect(movieService.create.mock.calls).toHaveLength(1);
     expect(functionCall).toMatchObject(movie);

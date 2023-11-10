@@ -6,4 +6,5 @@ export interface Movie {
   backdrop_path: string | null;
   vote_average: number;
   rating: 0 | 1 | 2 | 3 | 4 | 5;
+  user_movie: boolean;
 }
