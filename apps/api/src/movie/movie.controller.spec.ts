@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigModule } from '@nestjs/config';
+import { ThemoviedbService } from '../themoviedb/themoviedb.service';
 import { Movie } from '../types/movie.types';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
@@ -11,14 +13,27 @@ describe('MovieController', () => {
     findOne: jest.fn(),
     remove: jest.fn(),
   };
+  const themoviedbService = {
+    getMovie: jest.fn(),
+    search: jest.fn(),
+    similarMovie: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MovieService],
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: ['.env', '.env.local'],
+        }),
+      ],
+      providers: [MovieService, ThemoviedbService],
       controllers: [MovieController],
     })
       .overrideProvider(MovieService)
       .useValue(movieService)
+      .overrideProvider(ThemoviedbService)
+      .useValue(themoviedbService)
       .compile();
 
     controller = module.get<MovieController>(MovieController);
@@ -55,12 +70,23 @@ describe('MovieController', () => {
   it('can find a movie', async () => {
     await controller.findOne(1);
 
-    const functionCall = movieService.findOne.mock.lastCall as Parameters<
+    const findOneParameters = movieService.findOne.mock.lastCall as Parameters<
       MovieController['findOne']
     >;
 
     expect(movieService.findOne.mock.calls).toHaveLength(1);
-    expect(functionCall[0]).toBe(1);
+    expect(findOneParameters[0]).toBe(1);
+
+    // Tests call to themoviedb service when the movie is not saved by user
+    movieService.findOne.mockResolvedValueOnce(null);
+
+    await controller.findOne(1);
+    const getMovieParameters = themoviedbService.getMovie.mock.lastCall as Parameters<
+      ThemoviedbService['getMovie']
+    >;
+
+    expect(themoviedbService.getMovie.mock.calls).toHaveLength(1);
+    expect(getMovieParameters[0]).toBe(1);
   });
 
   it('can delete a movie', async () => {
