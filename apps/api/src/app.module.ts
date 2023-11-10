@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MovieModule } from './movie/movie.module';
 
 @Module({
   imports: [
@@ -17,11 +18,12 @@ import { AppService } from './app.service';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         authSource: configService.get('DB_AUTH'),
-        entities: [],
+        autoLoadEntities: true,
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    MovieModule,
   ],
   controllers: [AppController],
   providers: [AppService],
