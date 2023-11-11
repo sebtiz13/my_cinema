@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, MongoRepository } from 'typeorm';
 import { Movie as MovieInterface } from '../types/movie.types';
@@ -40,5 +40,18 @@ export class MovieService {
 
   async remove(id: number): Promise<DeleteResult> {
     return this.movieRepository.delete({ id });
+  }
+
+  async rateMovie(id: number, rate: MovieInterface['rating']): Promise<Movie> {
+    const movie = await this.movieRepository.findOneBy({ id });
+
+    if (movie === null) {
+      throw new NotFoundException();
+    }
+
+    movie.rating = rate;
+    await this.movieRepository.update({ id }, { rating: rate });
+
+    return movie;
   }
 }

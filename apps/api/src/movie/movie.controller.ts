@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, Query, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { Movie } from '../types/movie.types';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
@@ -54,5 +64,17 @@ export class MovieController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.movieService.remove(id);
+  }
+
+  @Get(':id/rate/:rating')
+  async rateMovie(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('rating', ParseIntPipe) rating: Movie['rating'],
+  ): Promise<Movie> {
+    if (rating < 0 || rating > 5) {
+      throw new BadRequestException('rate value should be between 0 and 5');
+    }
+
+    return this.movieService.rateMovie(id, rating);
   }
 }

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
+import { clearMock } from '../../test/helpers';
 import { Movie } from '../types/movie.types';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
@@ -12,6 +13,7 @@ describe('MovieController', () => {
     findAll: jest.fn(),
     findOne: jest.fn(),
     remove: jest.fn(),
+    rateMovie: jest.fn(),
   };
   const themoviedbService = {
     getMovie: jest.fn(),
@@ -37,6 +39,9 @@ describe('MovieController', () => {
       .compile();
 
     controller = module.get<MovieController>(MovieController);
+
+    clearMock(movieService);
+    clearMock(themoviedbService);
   });
 
   it('should be defined', () => {
@@ -96,5 +101,17 @@ describe('MovieController', () => {
 
     expect(movieService.remove.mock.calls).toHaveLength(1);
     expect(functionCall[0]).toBe(1);
+  });
+
+  it('can rate a movie', async () => {
+    await controller.rateMovie(1, 5);
+
+    const functionCall = movieService.rateMovie.mock.lastCall as Parameters<
+      MovieController['rateMovie']
+    >;
+
+    expect(movieService.rateMovie.mock.calls).toHaveLength(1);
+    expect(functionCall[0]).toBe(1);
+    expect(functionCall[1]).toBe(5);
   });
 });

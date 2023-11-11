@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoRepository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Movie as MovieInterface } from '../types/movie.types';
+import { clearMock } from '../../test/helpers';
 import { MovieService } from './movie.service';
 import { Movie } from './entities/movie.entity';
 
@@ -20,6 +21,7 @@ describe('MovieService', () => {
   let service: MovieService;
   const movieRepository = {
     save: jest.fn(),
+    update: jest.fn(),
     find: jest.fn(),
     findOneBy: jest.fn(),
     delete: jest.fn(),
@@ -43,7 +45,7 @@ describe('MovieService', () => {
 
     service = module.get<MovieService>(MovieService);
 
-    movieRepository.find.mockClear();
+    clearMock(movieRepository);
   });
 
   it('should be defined', () => {
@@ -96,6 +98,24 @@ describe('MovieService', () => {
     expect(movieRepository.delete.mock.calls).toHaveLength(1);
     expect(functionCall[0]).toMatchObject({
       id: 1,
+    });
+  });
+
+  it('can rate a movie', async () => {
+    movieRepository.findOneBy.mockResolvedValueOnce(movieData);
+
+    await service.rateMovie(1, 5);
+
+    const functionCall = movieRepository.update.mock.lastCall as Parameters<
+      MongoRepository<Movie>['update']
+    >;
+
+    expect(movieRepository.update.mock.calls).toHaveLength(1);
+    expect(functionCall[0]).toMatchObject({
+      id: 1,
+    });
+    expect(functionCall[1]).toMatchObject({
+      rating: 5,
     });
   });
 });
