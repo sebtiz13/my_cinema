@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import type { Movie as MovieInterface } from 'shared_types';
 import { DeleteResult, MongoRepository } from 'typeorm';
-import { Movie as MovieInterface } from '../types/movie.types';
 import { Movie } from './entities/movie.entity';
 
 @Injectable()

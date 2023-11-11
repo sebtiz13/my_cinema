@@ -39,6 +39,7 @@
     "@types/supertest": "^2.0.12",
     "eslint-config-custom": "*",
     "jest": "^29.5.0",
+    "shared_types": "*",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",

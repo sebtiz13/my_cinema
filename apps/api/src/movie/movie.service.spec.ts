@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoRepository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Movie as MovieInterface } from '../types/movie.types';
+import { Movie as MovieInterface } from 'shared_types';
 import { clearMock } from '../../test/helpers';
 import { MovieService } from './movie.service';
 import { Movie } from './entities/movie.entity';

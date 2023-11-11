@@ -10,7 +10,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import { Movie } from '../types/movie.types';
+import type { Movie } from 'shared_types';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
 import { MovieService } from './movie.service';
 

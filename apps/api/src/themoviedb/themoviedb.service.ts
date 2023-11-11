@@ -1,6 +1,6 @@
 import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Movie } from '../types/movie.types';
+import type { Movie } from 'shared_types';
 import { ApiMovieSearch, ApiMovie } from './themoviedb.types';
 
 interface SearchQuery {

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
+import type { Movie } from 'shared_types';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
 import { clearMock } from '../../test/helpers';
-import { Movie } from '../types/movie.types';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 

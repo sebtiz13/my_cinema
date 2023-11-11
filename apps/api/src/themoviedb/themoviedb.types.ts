@@ -1,4 +1,4 @@
-import { Movie } from '../types/movie.types';
+import type { Movie } from 'shared_types';
 
 export type ApiMovie = Movie & Record<string, unknown>;
 

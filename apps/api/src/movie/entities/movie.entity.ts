@@ -1,6 +1,6 @@
 import { Entity, Column, ObjectIdColumn, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { Movie as MovieInterface } from '../../types/movie.types';
+import type { Movie as MovieInterface } from 'shared_types';
 
 @Entity()
 export class Movie implements MovieInterface {
