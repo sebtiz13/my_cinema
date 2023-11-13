@@ -5,6 +5,7 @@ import { fetchJson, getImageUrl } from '../../../helpers';
 import { Poster } from '../../../components/poster';
 import { SavedButton } from '../../../components/save-button';
 import { Rating } from '../../../components/rating';
+import { MovieCard } from '@/components/movie-card';
 
 interface MovieProps {
   params: {
@@ -14,6 +15,7 @@ interface MovieProps {
 
 export default function Movie({ params: { id } }: MovieProps): JSX.Element | null {
   const [movie, setMovie] = useState<Movie>();
+  const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -22,6 +24,12 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
         setMovie(response);
         setSaved(response.user_movie);
       })
+      .catch(console.error);
+  }, [id]);
+
+  useEffect(() => {
+    fetchJson<Movie[]>(`http://localhost:3001/movie/${id}/similar`)
+      .then(setSimilarMovies)
       .catch(console.error);
   }, [id]);
 
@@ -87,6 +95,14 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
           </div>
         </div>
       </header>
+      <main className="container mx-auto mt-8 mb-8">
+        <h2 className="text-xl font-bold mb-6">Similar movies</h2>
+        <div className="grid grid-cols-5 gap-4">
+          {similarMovies.map((similarMovie) => (
+            <MovieCard key={similarMovie.id} movie={similarMovie} />
+          ))}
+        </div>
+      </main>
     </main>
   );
 }
