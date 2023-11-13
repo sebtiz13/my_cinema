@@ -77,4 +77,9 @@ export class MovieController {
 
     return this.movieService.rateMovie(id, rating);
   }
+
+  @Get(':id/similar')
+  async similarMovie(@Param('id', ParseIntPipe) id: number): Promise<Movie[]> {
+    return this.theMovieDbService.similarMovie(id);
+  }
 }
