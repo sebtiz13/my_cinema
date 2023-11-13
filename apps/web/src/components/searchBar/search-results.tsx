@@ -2,7 +2,7 @@
 import { forwardRef, useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
 import Link from 'next/link';
-import { fetchJson } from '../../helpers';
+import { fetchMovie } from '../../helpers';
 import { Poster } from '../poster';
 
 export interface SearchResultsProps {
@@ -15,7 +15,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(func
 ) {
   const [result, setResult] = useState<Movie[]>([]);
   useEffect(() => {
-    fetchJson<Movie[]>(`http://localhost:3001/movie/search?query=${query}`)
+    fetchMovie<Movie[]>(`http://localhost:3001/movie/search?query=${query}`)
       .then((response) => {
         setResult(response);
       })

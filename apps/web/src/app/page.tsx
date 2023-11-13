@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
 import { MovieCard } from '../components/movie-card';
-import { fetchJson } from '../helpers';
+import { fetchMovie } from '../helpers';
 
 export default function Home(): JSX.Element {
   const [movies, setMovies] = useState<Movie[]>([]);
   useEffect(() => {
-    fetchJson<Movie[]>('http://localhost:3001/movie').then(setMovies).catch(console.error);
+    fetchMovie<Movie[]>('http://localhost:3001/movie').then(setMovies).catch(console.error);
   }, []);
 
   const emptyMovies = (

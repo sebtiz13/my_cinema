@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
-import { fetchJson, getImageUrl } from '../../../helpers';
+import { fetchMovie, getImageUrl } from '../../../helpers';
 import { Poster } from '../../../components/poster';
 import { SavedButton } from '../../../components/save-button';
 import { Rating } from '../../../components/rating';
@@ -19,7 +19,7 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    fetchJson<Movie>(`http://localhost:3001/movie/${id}`)
+    fetchMovie<Movie>(`http://localhost:3001/movie/${id}`)
       .then((response) => {
         setMovie(response);
         setSaved(response.user_movie);
@@ -28,7 +28,7 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
   }, [id]);
 
   useEffect(() => {
-    fetchJson<Movie[]>(`http://localhost:3001/movie/${id}/similar`)
+    fetchMovie<Movie[]>(`http://localhost:3001/movie/${id}/similar`)
       .then(setSimilarMovies)
       .catch(console.error);
   }, [id]);
@@ -60,7 +60,9 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
   };
 
   async function onRate(rating: Movie['rating']): Promise<void> {
-    const updatedMovie = await fetchJson<Movie>(`http://localhost:3001/movie/${id}/rate/${rating}`);
+    const updatedMovie = await fetchMovie<Movie>(
+      `http://localhost:3001/movie/${id}/rate/${rating}`,
+    );
     setMovie(updatedMovie);
   }
 
