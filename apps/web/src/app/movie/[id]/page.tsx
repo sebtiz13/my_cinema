@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
-import { fetchMovie, getImageUrl } from '../../../helpers';
+import { fetchMovie, formatDate, getImageUrl } from '../../../helpers';
 import { Poster } from '../../../components/poster';
 import { SavedButton } from '../../../components/save-button';
 import { Rating } from '../../../components/rating';
@@ -80,6 +80,10 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
                 </div>
               </section>
               {saved ? <Rating onRate={onRate} rating={movie.rating} /> : null}
+              <section>
+                <h2 className="text-xl font-semibold">Release Date</h2>
+                <p>{formatDate(movie.release_date)}</p>
+              </section>
               <section>
                 <h2 className="text-xl font-semibold">Popularity</h2>
                 <div className="relative h-6 w-40">
