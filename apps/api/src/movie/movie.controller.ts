@@ -31,8 +31,27 @@ export class MovieController {
   }
 
   @Get()
-  async findAll(): Promise<Movie[]> {
-    return this.movieService.findAll();
+  async findAll(
+    @Query('sortBy') sortBy?: string,
+    @Query('sortOrder') sortOrder?: string,
+  ): Promise<Movie[]> {
+    if (sortBy !== undefined && !this.movieService.isValidSortKey(sortBy)) {
+      throw new BadRequestException(
+        `sortBy argument should be one value of this list "${this.movieService.validSortKeys.join(
+          ',',
+        )}"`,
+      );
+    }
+
+    if (sortOrder !== undefined && !this.movieService.isValidSortOrder(sortOrder)) {
+      throw new BadRequestException(
+        `sortOrder argument should be one value of this list "${this.movieService.validSortOrder.join(
+          ',',
+        )}"`,
+      );
+    }
+
+    return this.movieService.findAll(sortBy, sortOrder);
   }
 
   @Get('search')

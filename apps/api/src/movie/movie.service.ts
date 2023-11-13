@@ -2,7 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Movie as MovieInterface } from 'shared_types';
 import { DeleteResult, MongoRepository } from 'typeorm';
+import type { FindOptionsOrder } from 'typeorm';
 import { Movie } from './entities/movie.entity';
+
+type SortOrder = 'ASC' | 'DESC' | 'asc' | 'desc';
 
 @Injectable()
 export class MovieService {
@@ -10,6 +13,22 @@ export class MovieService {
     @InjectRepository(Movie)
     private movieRepository: MongoRepository<Movie>,
   ) {}
+
+  get validSortKeys() {
+    return ['title', 'vote_average', 'rating'];
+  }
+
+  get validSortOrder() {
+    return ['ASC', 'DESC', 'asc', 'desc'];
+  }
+
+  isValidSortKey(key: string): key is keyof MovieInterface {
+    return this.validSortKeys.includes(key);
+  }
+
+  isValidSortOrder(order: string): order is SortOrder {
+    return this.validSortOrder.includes(order);
+  }
 
   async create(movie: Omit<MovieInterface, 'user_movie'>): Promise<MovieInterface> {
     return this.movieRepository.save(movie);
@@ -30,8 +49,14 @@ export class MovieService {
     });
   }
 
-  async findAll(): Promise<MovieInterface[]> {
-    return this.movieRepository.find();
+  async findAll(sortBy?: keyof MovieInterface, sortOrder?: SortOrder): Promise<MovieInterface[]> {
+    const order: FindOptionsOrder<Movie> = {};
+
+    if (sortBy !== undefined) {
+      order[sortBy] = sortOrder ?? 'ASC';
+    }
+
+    return this.movieRepository.find({ order });
   }
 
   async findOne(id: number): Promise<MovieInterface | null> {
