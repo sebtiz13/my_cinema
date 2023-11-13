@@ -13,6 +13,12 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ## Commands
 
+### Oneline start command in docker
+
+```shell
+docker compose --profile fullstack up -d
+```
+
 ### Development
 
 Start fullstack in development mode

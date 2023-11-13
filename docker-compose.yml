@@ -7,6 +7,28 @@ services:
     restart: always
     ports:
       - 27017:27017
+    healthcheck:
+      test: ['CMD', 'mongosh', 'localhost:27017/test', '--quiet']
+      interval: 2s
+      timeout: 2s
+      retries: 10
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+
+  node:
+    image: node:18-alpine
+    restart: always
+    profiles: ['fullstack']
+    command: 'npm run dev'
+    working_dir: /home/node/app
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - 3000:3000
+      - 3001:3001
+    environment:
+      DB_HOST: 'mongo'
+    volumes:
+      - ./:/home/node/app
