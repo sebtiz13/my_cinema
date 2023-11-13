@@ -4,6 +4,7 @@ import type { Movie } from 'shared_types';
 import { fetchJson, getImageUrl } from '../../../helpers';
 import { Poster } from '../../../components/poster';
 import { SavedButton } from '../../../components/save-button';
+import { Rating } from '../../../components/rating';
 
 interface MovieProps {
   params: {
@@ -37,6 +38,7 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
   const onClickSave = async (): Promise<void> => {
     if (saved) {
       await fetch(`http://localhost:3001/movie/${id}`, { method: 'DELETE' });
+      setMovie({ ...movie, rating: 0 });
     } else {
       await fetch(`http://localhost:3001/movie`, {
         method: 'POST',
@@ -48,6 +50,11 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
     }
     setSaved(!saved);
   };
+
+  async function onRate(rating: Movie['rating']): Promise<void> {
+    const updatedMovie = await fetchJson<Movie>(`http://localhost:3001/movie/${id}/rate/${rating}`);
+    setMovie(updatedMovie);
+  }
 
   return (
     <main className="flex flex-col">
@@ -62,6 +69,7 @@ export default function Movie({ params: { id } }: MovieProps): JSX.Element | nul
                   <SavedButton className="h-8" onClick={onClickSave} saved={saved} />
                 </div>
               </section>
+              {saved ? <Rating onRate={onRate} rating={movie.rating} /> : null}
               <section>
                 <h2 className="text-xl font-semibold">Popularity</h2>
                 <div className="relative h-6 w-40">
