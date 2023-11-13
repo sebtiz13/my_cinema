@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { Movie as MovieInterface } from 'shared_types';
+import type { Movie as MovieInterface, PostMovie } from 'shared_types';
 import { DeleteResult, MongoRepository } from 'typeorm';
 import type { FindOptionsOrder } from 'typeorm';
 import { Movie } from './entities/movie.entity';
@@ -15,7 +15,7 @@ export class MovieService {
   ) {}
 
   get validSortKeys() {
-    return ['title', 'vote_average', 'rating'];
+    return ['title', 'vote_average', 'rating', 'release_date', 'user_saved'];
   }
 
   get validSortOrder() {
@@ -30,8 +30,13 @@ export class MovieService {
     return this.validSortOrder.includes(order);
   }
 
-  async create(movie: Omit<MovieInterface, 'user_movie'>): Promise<MovieInterface> {
-    return this.movieRepository.save(movie);
+  async create(movie: PostMovie): Promise<MovieInterface> {
+    return this.movieRepository.save({
+      ...movie,
+      release_date: new Date(movie.release_date),
+      user_saved: new Date(),
+      user_movie: true,
+    });
   }
 
   async search(query: string): Promise<MovieInterface[]> {

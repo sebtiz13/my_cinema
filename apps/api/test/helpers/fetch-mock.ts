@@ -4,6 +4,7 @@ const movieData = {
   id: 354912,
   title: 'Coco',
   overview: 'Lorem ipsum',
+  release_date: '2017-10-27',
   poster_path: '/poster.jpg',
   backdrop_path: '/backdrop.jpg',
   vote_average: 8.2,

@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoRepository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Movie as MovieInterface } from 'shared_types';
+import { PostMovie } from 'shared_types';
 import { clearMock } from '../../test/helpers';
 import { MovieService } from './movie.service';
 import { Movie } from './entities/movie.entity';
 
-const movieData: MovieInterface = {
+const movieData: PostMovie = {
   id: 354912,
   title: 'Coco',
   overview: 'Lorem ipsum',
+  release_date: '2023-11-13',
   poster_path: '/poster.jpg',
   backdrop_path: '/backdrop.jpg',
   vote_average: 8.2,
   rating: 0,
-  user_movie: true,
 };
 
 describe('MovieService', () => {
@@ -60,7 +60,12 @@ describe('MovieService', () => {
     >;
 
     expect(movieRepository.save.mock.calls).toHaveLength(1);
-    expect(functionCall[0]).toMatchObject(movieData);
+    expect(functionCall[0]).toMatchObject({
+      ...movieData,
+      release_date: new Date(movieData.release_date),
+    });
+    expect(functionCall[0].user_saved).toBeInstanceOf(Date);
+    expect((functionCall[0].user_saved as Date).getTime()).not.toBeNaN();
   });
 
   it('can search movie', async () => {

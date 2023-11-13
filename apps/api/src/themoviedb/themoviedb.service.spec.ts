@@ -30,6 +30,9 @@ describe('ThemoviedbService', () => {
   it('can get a movie', async () => {
     const movie = await service.getMovie(1);
 
+    expect(movie.release_date).toBeInstanceOf(Date);
+    expect(movie.release_date.getTime()).not.toBeNaN();
+    expect(movie.user_saved).toBe(null);
     expect(movie).toMatchObject({
       id: 354912,
       title: 'Coco',
@@ -51,6 +54,9 @@ describe('ThemoviedbService', () => {
   it('can get movies recommendations', async () => {
     const movie = await service.similarMovie(1);
 
+    expect(movie[0].release_date).toBeInstanceOf(Date);
+    expect(movie[0].release_date.getTime()).not.toBeNaN();
+    expect(movie[0].user_saved).toBe(null);
     expect(movie[0]).toMatchObject({
       id: 354912,
       title: 'Coco',
@@ -72,6 +78,9 @@ describe('ThemoviedbService', () => {
   it('can search movies', async () => {
     const movie = await service.search('test');
 
+    expect(movie[0].release_date).toBeInstanceOf(Date);
+    expect(movie[0].release_date.getTime()).not.toBeNaN();
+    expect(movie[0].user_saved).toBe(null);
     expect(movie[0]).toMatchObject({
       id: 354912,
       title: 'Coco',

@@ -22,10 +22,12 @@ function extractMovie(movie: ApiMovie): Movie {
     id: movie.id,
     title: movie.title,
     overview: movie.overview,
+    release_date: new Date(movie.release_date),
     poster_path: movie.poster_path,
     backdrop_path: movie.backdrop_path,
     vote_average: movie.vote_average,
     rating: 0,
+    user_saved: null,
     user_movie: false,
   };
 }

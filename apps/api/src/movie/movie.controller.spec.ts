@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
-import type { Movie } from 'shared_types';
+import type { Movie, PostMovie } from 'shared_types';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
 import { clearMock } from '../../test/helpers';
 import { MovieController } from './movie.controller';
@@ -49,10 +49,11 @@ describe('MovieController', () => {
   });
 
   it('can create movie', async () => {
-    const movie: Omit<Movie, 'user_movie'> = {
+    const movie: PostMovie = {
       id: 354912,
       title: 'Coco',
       overview: 'Lorem ipsum',
+      release_date: '2009-07-21T00:00:00.000Z',
       poster_path: '/poster.jpg',
       backdrop_path: '/backdrop.jpg',
       vote_average: 8.2,

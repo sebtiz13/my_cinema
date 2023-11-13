@@ -10,7 +10,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import type { Movie } from 'shared_types';
+import type { Movie, PostMovie } from 'shared_types';
 import { ThemoviedbService } from '../themoviedb/themoviedb.service';
 import { MovieService } from './movie.service';
 
@@ -22,7 +22,7 @@ export class MovieController {
   ) {}
 
   @Post()
-  async create(@Body() movie: Omit<Movie, 'user_movie'>): Promise<Movie> {
+  async create(@Body() movie: PostMovie): Promise<Movie> {
     try {
       return await this.movieService.create(movie);
     } catch (error) {
