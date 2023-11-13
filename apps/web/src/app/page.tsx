@@ -1,14 +1,32 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
-import { MovieCard } from '../components/movie-card';
 import { fetchMovie } from '../helpers';
+import { MovieCard } from '../components/movie-card';
+import { SortFilter } from '../components/sort-filter';
+
+const sorts = {
+  release_date: 'Release date',
+  user_saved: 'Saved date',
+};
+
+interface Sort extends Record<string, string>{
+  sortBy: string;
+  sortOrder: string;
+}
 
 export default function Home(): JSX.Element {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [sort, setSort] = useState<Sort>();
+
   useEffect(() => {
-    fetchMovie<Movie[]>('http://localhost:3001/movie').then(setMovies).catch(console.error);
-  }, []);
+    let url = 'http://localhost:3001/movie';
+    if(sort !== undefined) {
+      url += `?${new URLSearchParams(sort).toString()}`;
+    }
+
+    fetchMovie<Movie[]>(url).then(setMovies).catch(console.error);
+  }, [sort]);
 
   const emptyMovies = (
     <div className="text-center">
@@ -17,9 +35,24 @@ export default function Home(): JSX.Element {
     </div>
   );
 
+  function onSort(sortBy: string, sortOrder: string): void {
+    // ? Prevent useless change when SortFilter component is reloaded
+    if (sort !== undefined && sort.sortBy === sortBy && sort.sortOrder === sortOrder) {
+      return;
+    }
+
+    setSort({
+      sortBy,
+      sortOrder,
+    });
+  }
+
   const myMovies = (
     <>
-      <h1 className="text-xl font-bold mb-6">My movies</h1>
+      <div className="flex items-center mb-6 space-x-4">
+        <h1 className="text-xl font-bold">My movies</h1>
+        <SortFilter onSort={onSort} sorts={sorts} />
+      </div>
       <div className="grid grid-cols-5 gap-4">
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
