@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Inter } from 'next/font/google';
-import { SearchBar } from '../components/searchBar/search-bar';
+import { SearchBar } from '@/components';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });

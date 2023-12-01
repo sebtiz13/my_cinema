@@ -2,10 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
 import { fetchMovie, formatDate, getImageUrl } from '../../../helpers';
-import { Poster } from '../../../components/poster';
-import { SavedButton } from '../../../components/save-button';
-import { Rating } from '../../../components/rating';
-import { MovieCard } from '@/components/movie-card';
+import { Poster, SavedButton, Rating, MovieCard } from '@/components';
 
 interface MovieProps {
   params: {

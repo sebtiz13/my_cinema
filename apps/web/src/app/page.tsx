@@ -2,8 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { Movie } from 'shared_types';
 import { fetchMovie } from '../helpers';
-import { MovieCard } from '../components/movie-card';
-import { SortFilter } from '../components/sort-filter';
+import { MovieCard, SortFilter } from '@/components';
 
 const sorts = {
   release_date: 'Release date',
